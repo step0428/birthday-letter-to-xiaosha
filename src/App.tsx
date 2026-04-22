@@ -102,9 +102,9 @@ export default function App() {
           muted={isMuted}
           playsInline 
           className="absolute inset-0 w-full h-full object-cover"
-          poster="input_file_0.png"
+          poster={`${import.meta.env.BASE_URL}input_file_0.png`}
         >
-          <source src="海浪背景循环视频生成.mp4" type="video/mp4" />
+          <source src={`${import.meta.env.BASE_URL}海浪背景循环视频生成.mp4`} type="video/mp4" />
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#0a0a14_0%,#0d1525_30%,#0a1a2a_60%,#051525_100%)]" />
         </video>
         <div className="absolute inset-0 bg-black/30 z-[1]" />
