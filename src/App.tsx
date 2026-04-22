@@ -52,6 +52,7 @@ export default function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -99,31 +100,36 @@ export default function App() {
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden ocean-bg">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <video 
-          ref={videoRef}
-          src={`${import.meta.env.BASE_URL}bg-video.mp4`}
-          autoPlay 
-          loop 
-          muted={isMuted}
-          playsInline 
-          className="absolute inset-0 w-full h-full object-cover z-10"
-          onCanPlay={() => console.log('Video playback possible')}
-          onError={(e) => {
-            const videoError = videoRef.current?.error;
-            console.error('Video detail error:', {
-              code: videoError?.code,
-              message: videoError?.message,
-              src: videoRef.current?.currentSrc
-            });
-          }}
-        />
+        {!videoError && (
+          <video 
+            ref={videoRef}
+            src={`${import.meta.env.BASE_URL}bg-video.mp4`}
+            autoPlay 
+            loop 
+            muted={isMuted}
+            playsInline 
+            className="absolute inset-0 w-full h-full object-cover z-20"
+            onCanPlay={() => {
+              setVideoError(false);
+              console.log('Video playback possible');
+            }}
+            onError={(e) => {
+              setVideoError(true);
+              const error = videoRef.current?.error;
+              console.error('Video detail error:', {
+                code: error?.code,
+                message: error?.message,
+              });
+            }}
+          />
+        )}
         {/* Animated CSS Waves - This will show if video is broken or loading */}
         <div className="ocean-wave z-0" />
         <div className="ocean-wave ocean-wave-delayed z-0" />
         
         {/* Deep sea fallback gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a2a] via-[#051525] to-[#010a15] z-[-1]" />
-        <div className="absolute inset-0 bg-black/40 z-[11]" />
+        <div className="absolute inset-0 bg-black/40 z-[25]" />
         <Particles />
       </div>
 
