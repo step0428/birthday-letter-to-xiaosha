@@ -33,3 +33,39 @@
   background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
 }
+
+/* Ocean Wave Fallback Animation */
+@keyframes wave-float {
+  0% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-30px) scale(1.1); opacity: 0.5; }
+  100% { transform: translateY(0) scale(1); opacity: 0.3; }
+}
+
+@keyframes slow-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ocean-bg {
+  background: linear-gradient(180deg, #0a1a2a 0%, #051525 50%, #010a15 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.ocean-wave {
+  position: absolute;
+  width: 150vw;
+  height: 150vw;
+  top: -25vw;
+  left: -25vw;
+  background: radial-gradient(circle at center, rgba(126, 184, 218, 0.08) 0%, transparent 70%);
+  animation: wave-float 20s infinite ease-in-out, slow-rotate 60s infinite linear;
+  pointer-events: none;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+.ocean-wave-delayed {
+  animation-delay: -10s;
+  background: radial-gradient(circle at center, rgba(126, 184, 218, 0.05) 0%, transparent 60%);
+  border-radius: 60% 40% 30% 70% / 50% 40% 30% 60%;
+}

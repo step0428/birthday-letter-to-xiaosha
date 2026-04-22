@@ -53,6 +53,7 @@ export default function App() {
   const [showLetter, setShowLetter] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
@@ -66,9 +67,13 @@ export default function App() {
       setShowLetter(true);
     }, 1500); 
 
-    // Unmute video on open if not explicitly muted by user before
-    if (videoRef.current && isMuted) {
-      videoRef.current.muted = false;
+    // Unmute and play on open
+    if (isMuted) {
+      if (videoRef.current) videoRef.current.muted = false;
+      if (audioRef.current) {
+        audioRef.current.muted = false;
+        audioRef.current.play().catch(() => {});
+      }
       setIsMuted(false);
     }
   };
@@ -79,27 +84,29 @@ export default function App() {
   };
 
   const toggleMute = () => {
+    const nextMuteState = !isMuted;
+    
     if (videoRef.current) {
-      const nextMuteState = !isMuted;
       videoRef.current.muted = nextMuteState;
-      setIsMuted(nextMuteState);
-      
-      // Ensure video is playing (browsers may pause unmuted video if not interacted)
-      if (!nextMuteState) {
-        videoRef.current.play().catch(() => {});
-      }
+      if (!nextMuteState) videoRef.current.play().catch(() => {});
     }
+    
+    if (audioRef.current) {
+      audioRef.current.muted = nextMuteState;
+      if (!nextMuteState) audioRef.current.play().catch(() => {});
+    }
+
+    setIsMuted(nextMuteState);
   };
 
   useEffect(() => {
     console.log('App Initialized. Base URL:', import.meta.env.BASE_URL);
-    // 检查视频文件是否存在（尝试静默预加载）
-    const testVideo = document.createElement('video');
-    testVideo.src = `${import.meta.env.BASE_URL}bg-video.mp4`;
+    console.log('Video Path:', `${import.meta.env.BASE_URL}bg-video.mp4`);
+    console.log('Music Path:', `${import.meta.env.BASE_URL}bg-music.mp3`);
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#000]">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden ocean-bg">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video 
@@ -109,7 +116,7 @@ export default function App() {
           loop 
           muted={isMuted}
           playsInline 
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover z-10"
           onCanPlay={() => console.log('Video playback possible')}
           onError={(e) => {
             const videoError = videoRef.current?.error;
@@ -120,9 +127,19 @@ export default function App() {
             });
           }}
         />
-        {/* Deep sea fallback gradient if video fails */}
+        <audio
+          ref={audioRef}
+          src={`${import.meta.env.BASE_URL}bg-music.mp3`}
+          loop
+          muted={isMuted}
+        />
+        {/* Animated CSS Waves - This will show if video is broken or loading */}
+        <div className="ocean-wave z-0" />
+        <div className="ocean-wave ocean-wave-delayed z-0" />
+        
+        {/* Deep sea fallback gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a2a] via-[#051525] to-[#010a15] z-[-1]" />
-        <div className="absolute inset-0 bg-black/30 z-[1]" />
+        <div className="absolute inset-0 bg-black/40 z-[11]" />
         <Particles />
       </div>
 
