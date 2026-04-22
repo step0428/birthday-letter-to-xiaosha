@@ -102,9 +102,12 @@ export default function App() {
           muted={isMuted}
           playsInline 
           className="absolute inset-0 w-full h-full object-cover"
+          onCanPlay={() => console.log('Video can play')}
+          onError={(e) => console.error('Video error:', e)}
         >
           <source src={`${import.meta.env.BASE_URL}bg-video.mp4`} type="video/mp4" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#0a0a14_0%,#0d1525_30%,#0a1a2a_60%,#051525_100%)]" />
+          {/* Fallback for video decoding issues */}
+          <div className="absolute inset-0 bg-[#0a1a2a]" />
         </video>
         <div className="absolute inset-0 bg-black/30 z-[1]" />
         <Particles />
