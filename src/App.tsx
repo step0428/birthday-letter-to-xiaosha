@@ -91,24 +91,37 @@ export default function App() {
     }
   };
 
+  useEffect(() => {
+    console.log('App Initialized. Base URL:', import.meta.env.BASE_URL);
+    // 检查视频文件是否存在（尝试静默预加载）
+    const testVideo = document.createElement('video');
+    testVideo.src = `${import.meta.env.BASE_URL}bg-video.mp4`;
+  }, []);
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#000]">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video 
           ref={videoRef}
+          src={`${import.meta.env.BASE_URL}bg-video.mp4`}
           autoPlay 
           loop 
           muted={isMuted}
           playsInline 
           className="absolute inset-0 w-full h-full object-cover"
-          onCanPlay={() => console.log('Video can play')}
-          onError={(e) => console.error('Video error:', e)}
-        >
-          <source src={`${import.meta.env.BASE_URL}bg-video.mp4`} type="video/mp4" />
-          {/* Fallback for video decoding issues */}
-          <div className="absolute inset-0 bg-[#0a1a2a]" />
-        </video>
+          onCanPlay={() => console.log('Video playback possible')}
+          onError={(e) => {
+            const videoError = videoRef.current?.error;
+            console.error('Video detail error:', {
+              code: videoError?.code,
+              message: videoError?.message,
+              src: videoRef.current?.currentSrc
+            });
+          }}
+        />
+        {/* Deep sea fallback gradient if video fails */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a2a] via-[#051525] to-[#010a15] z-[-1]" />
         <div className="absolute inset-0 bg-black/30 z-[1]" />
         <Particles />
       </div>
