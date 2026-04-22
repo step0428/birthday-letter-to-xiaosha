@@ -53,7 +53,6 @@ export default function App() {
   const [showLetter, setShowLetter] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
@@ -68,12 +67,9 @@ export default function App() {
     }, 1500); 
 
     // Unmute and play on open
-    if (isMuted) {
-      if (videoRef.current) videoRef.current.muted = false;
-      if (audioRef.current) {
-        audioRef.current.muted = false;
-        audioRef.current.play().catch(() => {});
-      }
+    if (isMuted && videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.play().catch(() => {});
       setIsMuted(false);
     }
   };
@@ -90,11 +86,6 @@ export default function App() {
       videoRef.current.muted = nextMuteState;
       if (!nextMuteState) videoRef.current.play().catch(() => {});
     }
-    
-    if (audioRef.current) {
-      audioRef.current.muted = nextMuteState;
-      if (!nextMuteState) audioRef.current.play().catch(() => {});
-    }
 
     setIsMuted(nextMuteState);
   };
@@ -102,7 +93,6 @@ export default function App() {
   useEffect(() => {
     console.log('App Initialized. Base URL:', import.meta.env.BASE_URL);
     console.log('Video Path:', `${import.meta.env.BASE_URL}bg-video.mp4`);
-    console.log('Music Path:', `${import.meta.env.BASE_URL}bg-music.mp3`);
   }, []);
 
   return (
@@ -126,12 +116,6 @@ export default function App() {
               src: videoRef.current?.currentSrc
             });
           }}
-        />
-        <audio
-          ref={audioRef}
-          src={`${import.meta.env.BASE_URL}bg-music.mp3`}
-          loop
-          muted={isMuted}
         />
         {/* Animated CSS Waves - This will show if video is broken or loading */}
         <div className="ocean-wave z-0" />
