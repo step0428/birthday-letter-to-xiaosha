@@ -178,7 +178,7 @@ export default function App() {
               >
                 <div className="absolute inset-0" onClick={handleClose} />
                 
-                <div className="relative max-w-2xl w-full max-h-[90vh] bg-[rgba(15,25,40,0.6)] backdrop-blur-[30px] border border-white/10 rounded-2xl p-10 sm:p-14 shadow-[0_30px_80px_rgba(0,0,0,0.4)] flex flex-col letter-scroll overflow-y-auto">
+                <div className="relative max-w-2xl w-full max-h-[90vh] bg-[rgba(10,20,35,0.2)] backdrop-blur-[12px] border border-white/10 rounded-2xl p-10 sm:p-14 shadow-[0_30px_80px_rgba(0,0,0,0.3)] flex flex-col letter-scroll overflow-y-auto">
                   <button 
                     onClick={handleClose}
                     className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:bg-white/15 transition-all"
